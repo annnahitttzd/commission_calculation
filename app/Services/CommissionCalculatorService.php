@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
         private $withdrawalCountThisWeek = [];
     public function calculateCommission(array $operations)
     {
+
         $operationDate = Carbon::parse($operations[0]);
         $userId = $operations[1];
         $clientType = $operations[2];
@@ -30,12 +31,9 @@ use Illuminate\Support\Facades\Http;
         }
         private function calculateWithdrawCommission($userId, $clientType,$operationDate, $amount)
         {
-
             if (!isset($this->userWithdrawnAmountThisWeek[$userId])) {
-
                 $this->userWithdrawnAmountThisWeek[$userId] = 0;
                 $this->withdrawalCountThisWeek[$userId] = 0;
-
             }
             if ($clientType === 'private') {
                 if ($this->freeOfCharge($userId, $operationDate, $amount)) {
@@ -53,7 +51,6 @@ use Illuminate\Support\Facades\Http;
             $endOfWeek = Carbon::parse($operationDate)->endOfWeek();
             if ($operationDate->isBetween($startOfWeek, $endOfWeek)) {
             $this->withdrawalCountThisWeek[$userId]++;
-//                dump($operationDate->week());
             if ($this->withdrawalCountThisWeek[$userId] <= 3) {
              $this->userWithdrawnAmountThisWeek[$userId] += $amount;
 
@@ -61,13 +58,9 @@ use Illuminate\Support\Facades\Http;
                 return true;
                 } else {
                  return $amount - (1000.00 - $this->userWithdrawnAmountThisWeek[$userId]);
+                }
             }
-    }
-            }
+        }
             return false;
         }
-
     }
-
-//
-//

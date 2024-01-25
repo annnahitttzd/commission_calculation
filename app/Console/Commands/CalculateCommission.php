@@ -16,12 +16,13 @@ class CalculateCommission extends Command
         $csvPath = storage_path('app/public/operations.csv');
         $csvFile = fopen($csvPath, 'r');
         while (($row = fgetcsv($csvFile)) !== false) {
-            $rows[] = $row;
+            $operations[] = $row;
             }
         fclose($csvFile);
+//        $calculator = new CommissionCalculatorService();
+//        $calculator->calculateCommissionForUser($operations);
         $calculator = app(CommissionCalculatorService::class);
-        foreach ($rows as $row) {
-
+        foreach ($operations as $row) {
             $commission = $calculator->calculateCommission($row);
 //            dump( $commission);
         }
